@@ -3,8 +3,31 @@ const EMPTY_HEART = '♡'
 const FULL_HEART = '♥'
 
 // Your JavaScript code goes here!
-
-
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll('.like').forEach(likeButton => {
+    likeButton.addEventListener('click', function() {
+      if (likeButton.classList.contains('activated-heart')) {
+        likeButton.classList.remove('activated-heart');
+        likeButton.querySelector('.like-glyph').innerHTML = EMPTY_HEART;
+      } else {
+        mimicServerCall()
+          .then(() => {
+            likeButton.classList.add('activated-heart');
+            likeButton.querySelector('.like-glyph').innerHTML = FULL_HEART;
+          })
+          .catch(error => {
+            const modal = document.getElementById('modal');
+            const modalMessage = document.getElementById('modal-message');
+            modalMessage.innerText = error;
+            modal.classList.remove('hidden');
+            setTimeout(function() {
+              modal.classList.add('hidden');
+            }, 3000); 
+          });
+      }
+    });
+  });
+});
 
 
 //------------------------------------------------------------------------------
